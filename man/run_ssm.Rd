@@ -6,8 +6,9 @@
 \usage{
 run_ssm(N, I, J, Y = NULL, D = NULL, Z = NULL, sigmax = 1,
   lambda = 1, y_T = pi/4, y_D = (3 * pi)/4, priors = "default",
-  kappa_bnds = c(5, 300), nchains = 1, niter = 2000, nwarmup = 500,
-  ncores = "AUTO", stan_object = FALSE, ...)
+  gfunction = c("logistic", "gompertz"), kappa_bnds = c(5, 300),
+  nchains = 1, niter = 2000, nwarmup = 500, ncores = "AUTO",
+  stan_object = FALSE, ...)
 }
 \arguments{
 \item{N}{(integer) length of the Y-trajectories}
@@ -31,6 +32,8 @@ run_ssm(N, I, J, Y = NULL, D = NULL, Z = NULL, sigmax = 1,
 \item{y_D}{(numeric) position in angles of the distractor}
 
 \item{priors}{(list) a list of arguments specifying priors for each parameter involved in the model (see \code{\link{check_prior}}). If \code{priors="default"} then pre-defined tpriors will be used.}
+
+\item{gfunction}{(character) type of link function between latent states and observed data: 'logistic', 'gompertz' (\code{default = 'logistic'}).}
 
 \item{kappa_bnds}{(array) array containing the lower and upper bounds for the kappa parameter (\code{default = c(5,300)})}
 

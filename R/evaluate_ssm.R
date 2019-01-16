@@ -31,7 +31,13 @@ evaluate_ssm <- function(ssmfit=NULL,M=100,plotx=TRUE){
   if(M<0)
     stop("Positive integers should be provided for M")
   
-  I <- ssmfit$I; J <- ssmfit$J; N <- ssmfit$N; Z <- ssmfit$data$Z; Y <- ssmfit$data$Y
+  I <- ssmfit$I; J <- ssmfit$J; N <- ssmfit$N; Z <- ssmfit$data$Z; Y <- ssmfit$data$Y; gfunction <- ssmfit$Gfunction
+  
+  if(gfunction=="logistic"){
+    gfunc <- function(lb,r,b,x){lb + (r / ( 1 + exp(b - x)))}
+  }else if(gfunction=="gompertz"){
+    gfunc <- function(lb,r,b,x){lb + (r * exp(-b * exp(-x)))}
+  }
   
   Y_m <- array(0,c(N,I*J,M))
   PA_ov <- rep(NA,M)
@@ -54,7 +60,7 @@ evaluate_ssm <- function(ssmfit=NULL,M=100,plotx=TRUE){
     Y_m[1,,m] <- Y[1,] # do not consider the step n=0 in the evaluation
     for(n in 2:N){ # innter loop over n=1...N
       xv <- rep(ssmfit$data$X[iidm[m],n,],each=J)
-      mu_m[n,] <- bnds[,1] + (bnds[,3] / ( 1 + exp(b - xv)))
+      mu_m[n,] <- gfunc(bnds[,1],bnds[,3],b,xv)
       expx <- exp(ssmfit$params$lambda*ssmfit$data$D[n,])
       kappa1 <- ssmfit$params$kappa_bnds[1] + ((expx-min(expx)) / (max(expx)-min(expx))) * (ssmfit$params$kappa_bnds[2]-ssmfit$params$kappa_bnds[1])
       Y_m[n,,m] <- mapply(function(k){CircStats::rvm(n=1,mean = mu_m[n,k],k = kappa1[k])},1:(I*J))

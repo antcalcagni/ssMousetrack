@@ -15,6 +15,7 @@
 #' @param yD (numeric) position in angles of the distractor
 #' @param kappa_bnds (array) array containing the lower and upper bounds for the kappa parameter (\code{default = c(120,300)})
 #' @param priors (list) a list of arguments specifying priors for each parameter involved in the model (see \code{\link{check_prior}}). If \code{priors="default"} then pre-defined priors will be used.
+#' @param gfunction (character) type of link function between latent states and observed data: 'logistic', 'gompertz' (\code{default = 'logistic'}).  
 #' @param ... other stan arguments (e.g., 'init', 'algorithm', 'sample_file'. See \code{\link[rstan:sampling]{sampling}}) 
 #' @return a datalist containing simulated data and parameters
 #' @export
@@ -37,7 +38,7 @@
 #' }
 
 generate_data <- function(M=100,N=61,I=10,J=12,K=c(4),Z.type=c("symmetric"),Z.contrast="treatment",
-                          Z.formula=NULL,sigmax=1,lambda=1,yT=pi/4,yD=(3*pi)/4,kappa_bnds=c(120,300),priors="default",...){
+                          Z.formula=NULL,sigmax=1,lambda=1,yT=pi/4,yD=(3*pi)/4,kappa_bnds=c(120,300),priors="default",gfunction=c("logistic","gompertz"),...){
   if(I<1| N<1 | J<1 | M<1)
     stop("Positive integers should be provided for I, J, N, M")
   if(length(K)<1)
@@ -56,6 +57,8 @@ generate_data <- function(M=100,N=61,I=10,J=12,K=c(4),Z.type=c("symmetric"),Z.co
     stop("The parameter yD must be greater yT")
   if(is.null(Z.formula))
     stop("The model.matrix formula for Z must be provided")
+  
+  gfunction=match.arg(gfunction)
 
   X.design <- generate_design(I,J,K,Z.type)
   Z.matrix <- stats::model.matrix(formula(Z.formula),data = X.design,contrasts.arg = Z.contrast)
@@ -83,15 +86,21 @@ generate_data <- function(M=100,N=61,I=10,J=12,K=c(4),Z.type=c("symmetric"),Z.co
     kappa_ub = kappa_bnds[2]
   )
   
-  out <- rstan::sampling(stanmodels$simulate_data, data = datastan,chain=1,iter=M+100,warmup=100,...)
-  data_out <- rstan::extract(out,pars=c("b","z","mu","y_sim","gamma","dy_sim","kappas"))
+  if(gfunction=="logistic"){
+    out <- rstan::sampling(stanmodels$simulate_data_log, data = datastan,chain=1,iter=M,warmup=M/4,...)
+  }else if(gfunction=="gompertz"){
+    out <- rstan::sampling(stanmodels$simulate_data_gomp, data = datastan,chain=1,iter=M,warmup=M/4,...)
+  }
+  
+  data_out <- rstan::extract(out,pars=c("b","z","mu","y_sim","gamma","dy_sim"))
   
   datasim <- list(
     I = I,
     N = N,
     J = J,
     K = K,
-    params = list(sigmax=rep(sigmax,I),lambda=rep(lambda,I*J),gamma=data_out$gamma,beta=data_out$b,kappa=data_out$kappas),
+    Gfunction = gfunction,
+    params = list(sigmax=rep(sigmax,I),lambda=rep(lambda,I*J),gamma=data_out$gamma,beta=data_out$b),
     data = list(Y=data_out$y_sim,X=data_out$z,MU=data_out$mu,D=data_out$dy_sim,Z=Z.matrix),
     design = X.design
   )

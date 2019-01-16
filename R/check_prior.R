@@ -44,7 +44,7 @@ check_prior <- function(priors=NULL){
   
   # Check NULL elements in the list and replace them with pre-defined priors
   iid <- which(sapply(priors,is.null)) 
-  priors[iid] <- ifelse(iid==1,"normal(0,1)","normal(0,2)") #normal(0,1) is for the dummy intercept of the stimuli equation
+  priors[iid] <- ifelse(iid==1,"lognormal(1,0.5)","normal(0,2)") #lognormal() is for the dummy intercept of the stimuli equation
   
   prior_dist <-mapply(function(i){
     strs <- strsplit(priors[[i]],"[,)T(]")[[1]][1]
