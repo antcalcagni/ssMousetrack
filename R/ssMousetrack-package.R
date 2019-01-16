@@ -36,10 +36,10 @@
 #' \deqn{ y_{ij}^{(n)} \sim vonMises\big(\mu_{ij}^{(n)},\kappa_{ij}^{(n)}\big) }
 #' where \eqn{\mu_{ij}^{(n)}} and \eqn{\kappa_{ij}^{(n)}} are the location and the concentration parameters for the vonMises probability law. 
 #' The moving mean on the arc \eqn{\mu_{ij}^{(n)}} is defined as:
-#' \deqn{ \mu_{ij}^{(n)} := G(\beta,x_{i}^{(n)})
+#' \deqn{ \mu_{ij}^{(n)} := G(\beta,x_{i}^{(n)})}
 #' with \eqn{\beta} being a J x 1 array of real parameters representing the contribution of the \emph{j}-th stimulus on the observed trajectory \eqn{y_{ij} = (y^{(0)},...,y^{(N)})} 
-#' whereas $G$ is a non-linear function mapping reals to the subset $(0,\pi]$ of the form: (i) \eqn{\big[ (1 + \exp(\beta - x_{i}^{(n)})) \big]\pi^{-1} } (logistic), (ii) \eqn{\big[ \exp(-\beta \exp(-x_{i}^{(n)})) \big]\pi} (gompertz). 
-#' In the $G$ equation, \eqn{x_i^{(n)}} is a real random quantity obeying to the law:
+#' whereas \eqn{G} is a non-linear function mapping reals to the subset \eqn{(0,\pi]} of the form: (i) \eqn{\big[ (1 + \exp(\beta - x_{i}^{(n)})) \big]\pi^{-1} } (logistic), (ii) \eqn{\big[ \exp(-\beta \exp(-x_{i}^{(n)})) \big]\pi} (gompertz). 
+#' In the \eqn{G} equation, \eqn{x_i^{(n)}} is a real random quantity obeying to the law:
 #' \deqn{ x_i^{(n)} \sim Normal\big( x_i^{(n-1)},\sigma^2_i \big) }
 #' which represents a random walk process with time-fixed variance \eqn{\sigma^2_i}. The terms \eqn{x_{i} = (x_{i}^{(0)},...,x_{i}^{(N)})} are the individual latent dynamics
 #' unaffected by the stimuli (i.e., how individual differ in executing the task) whereas \eqn{\beta} contains the experimental effects regardless to the individual dynamic (i.e., how experimental variables act on the individual dynamics to produce the observed responses).
