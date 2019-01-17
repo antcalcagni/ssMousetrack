@@ -7,3 +7,5 @@ mation.
 Current version of the package: 1.1.5
 
 https://cran.r-project.org/web/packages/ssMousetrack/
+
+https://zenodo.org/badge/latestdoi/165551215
