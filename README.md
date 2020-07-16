@@ -9,7 +9,8 @@ Estimates previously compiled state-space modeling for mouse-tracking experiment
 Current version of the package: 1.1.5 | URL: https://cran.r-project.org/web/packages/ssMousetrack/
 
 Paper: 
-Calcagnì, A.; Pastore, M.; Altoé, G. ssMousetrack—Analysing Computerized Tracking Data via Bayesian State-Space Models in R. Math. Comput. Appl. 2020, 25, 41. 
+
+Calcagnì, A.; Pastore, M.; Altoé, G. ssMousetrack—Analysing Computerized Tracking Data via Bayesian State-Space Models in R. Math. Comput. Appl. 2020, 25, 41 (https://www.mdpi.com/2297-8747/25/3/41)
 
 Preprint is also available at: 
 https://arxiv.org/pdf/1904.10172.pdf
