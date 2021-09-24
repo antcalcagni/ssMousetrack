@@ -9,12 +9,12 @@ Depends: methods, R (>= 3.4.0), Rcpp (>= 1.0.0)
 Imports: rstan (>= 2.18.2), rstantools (>= 1.5.1), CircStats, dtw,
         ggplot2, cowplot
 LinkingTo: BH (>= 1.66.0-1), Rcpp (>= 1.0.0), RcppEigen (>= 0.3.3.5.0),
-        rstan (>= 2.18.2), StanHeaders (>= 2.18.0)
+        rstan (>= 2.18.2), StanHeaders (>= 2.18.0), RcppParallel (>= 5.0.2)
 Encoding: UTF-8
 LazyData: true
 NeedsCompilation: yes
 SystemRequirements: GNU make
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.2
 Author: Antonio Calcagnì, Massimiliano Pastore
 Maintainer: Antonio Calcagnì <ant.calcagni@gmail.com>
 BugReports: https://github.com/antcalcagni/ssMousetrack/issues
