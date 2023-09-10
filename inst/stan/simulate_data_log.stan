@@ -28,8 +28,8 @@ vector kronecker_simplified_J(int I, int J, vector x){
   vector compute_deltay(vector x, int I, real pT, real pD, real pC){
     vector[I] dx;
     for(i in 1:I){
-      if(x[i]>=pC) dx[i] = fabs(x[i]-pD);
-      else dx[i] = fabs(x[i]-pT);}
+      if(x[i]>=pC) dx[i] = abs(x[i]-pD);
+      else dx[i] = abs(x[i]-pT);}
     return dx;
   }
 }
@@ -39,7 +39,7 @@ data{
   int N; // length of Y-trajectories
   int J; // number of trials (the same for each individual)
   int KK; // total number of categorical levels minus one (number of columns of the model matrix Z)
-  vector[I*J] Y[N]; // NxIJ matrix of Y-trajectories
+  array[N] vector[I*J] Y; // NxIJ matrix of Y-trajectories
   vector<lower=0>[I] sigmaz; // sigmax parameter for the latent dynamics
   matrix<lower=0,upper=pi()>[I*J,3] bnds; // matrix of bounds (lb,ub,ub-lb) for sampling the Y-trajectories
   matrix[I*J,KK] D; // IJxKK matrix for delta-values
@@ -78,12 +78,12 @@ model{
 }
 
 generated quantities{
-  vector[I] z[N]; // NxI matrix of latent dynamics
-  vector[I*J] mu[N]; // NxIJ matrix of von-mises means
-  vector[I*J] y_sim[N]; // NxIJ matrix of simulated Y-trajectories
-  vector[I*J] dy_sim[N]; // NxIJ matrix of delta values
+  array[N] vector[I] z; // NxI matrix of latent dynamics
+  array[N] vector[I*J] mu; // NxIJ matrix of von-mises means
+  array[N] vector[I*J] y_sim; // NxIJ matrix of simulated Y-trajectories
+  array[N] vector[I*J] dy_sim; // NxIJ matrix of delta values
   vector[I*J] z_vec; // working variable
-  vector<lower=kappa_lb,upper=kappa_ub>[I*J] kappas[N]; // working variable
+  array[N] vector<lower=kappa_lb,upper=kappa_ub>[I*J] kappas; // working variable
 
   // Sampling the latent dynamics
   z[1] = rep_vector(1e-04,I);
