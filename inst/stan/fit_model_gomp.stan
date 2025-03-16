@@ -32,8 +32,8 @@ data{
   int N; // length of Y-trajectories
   int J; // number of trials (the same for each individual)
   int KK; // total number of categorical levels minus one (number of columns of the model matrix Z)
-  vector[I*J] Y[N]; // NxIJ matrix of Y-trajectories
-  vector[I*J] DY[N]; //NxIJ matrix for delta-values
+  array[N] vector[I*J] Y; // NxIJ matrix of Y-trajectories
+  array[N] vector[I*J] DY; //NxIJ matrix for delta-values
   vector<lower=0>[I] sigmaz; // sigmax parameter for the latent dynamics
   matrix<lower=0,upper=pi()>[I*J,3] bnds; // matrix of bounds (lb,ub,ub-lb) for sampling the Y-trajectories
   matrix[I*J,KK] D; // IJxKK matrix of the exp design 
@@ -51,13 +51,13 @@ parameters{
 }
 
 transformed parameters{
-  vector[I] z_pred[N]; // latent states (mean: E[X]) in the prediction stage of the Kalman filter loop
-  vector[I] z_upd[N]; // latent states (mean: E[X]) in the update stage of the Kalman filter loop
-  vector<lower=0>[I] lambda_pred[N]; // latent states (variance: VAR[X]) in the prediction stage of the Kalman filter loop
-  vector<lower=0>[I] lambda_upd[N]; // latent states (variance: VAR[X]) in the prediction stage of the Kalman filter loop
-  vector<lower=0>[I*J] sigma_kf[N]; // working variables for the Kalman filter loop
+  array[N] vector[I] z_pred; // latent states (mean: E[X]) in the prediction stage of the Kalman filter loop
+  array[N] vector[I] z_upd; // latent states (mean: E[X]) in the update stage of the Kalman filter loop
+  array[N] vector<lower=0>[I] lambda_pred; // latent states (variance: VAR[X]) in the prediction stage of the Kalman filter loop
+  array[N] vector<lower=0>[I] lambda_upd; // latent states (variance: VAR[X]) in the prediction stage of the Kalman filter loop
+  array[N] vector<lower=0>[I*J] sigma_kf; // working variables for the Kalman filter loop
   vector[I*J] kappa_vec; // working variables for the Kalman filter loop
-  vector[I*J] y_star[N]; // predicted Y-trajectories in the Kalman filter loop
+  array[N] vector[I*J] y_star; // predicted Y-trajectories in the Kalman filter loop
   vector[I*J] G; // working variables for the Kalman filter loop
   vector[I*J] z_vec; // working variables for the Kalman filter loop
   vector[I*J] lambda_pred_vec; // working variables for the Kalman filter loop
@@ -130,10 +130,10 @@ model{
 
 generated quantities{
   // Fixed-Interval backward smoother 
-  vector[I] z_s_pred[N];
-  vector[I] z_s_upd[N]; 
-  vector[I] lambda_s_pred[N];
-  vector<lower=0>[I] lambda_s_upd[N]; 
+  array[N] vector[I] z_s_pred;
+  array[N] vector[I] z_s_upd; 
+  array[N] vector[I] lambda_s_pred;
+  array[N] vector<lower=0>[I] lambda_s_upd; 
   vector[I] G_s;
   
   z_s_upd[N] = z_upd[N];
